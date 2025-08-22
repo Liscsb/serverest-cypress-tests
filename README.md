@@ -35,14 +35,28 @@ The web application tested in this project is [Serverest Frontend](https://front
 - Screenshots are saved in `cypress/screenshots/` and organized by test file and scenario.
 - Use screenshots to debug UI issues and validate visual states after test execution.
 
+## File Naming Convention
+
+This project follows these naming conventions for different types of files:
+
+- **Test Files**: camelCase
+  - Examples: `apiUsers.cy.js`, `purchaseFlow.cy.js`
+- **Page Objects/Components/Classes**: PascalCase
+  - Examples: `LoginPage.js`, `Button.js`, `UsersApi.js`
+- **Configuration Files**: kebab-case
+  - Examples: `cypress.config.js`
+
 ## Project Structure
 - `cypress/` - All test specs and Cypress configuration.
 - `cypress/e2e/` - Test specs.
+  - `api/` - API test specs
+  - `web/` - UI test specs
 - `cypress/support/` - Support files and custom commands.
+  - `api/` - API helpers and classes
   - `components/` - Reusable UI helpers (e.g., Button, Input).
   - `pages/` - Page Objects encapsulating UI logic (e.g., LoginPage).
   - `selectors/` - Centralized selectors for each page/component.
-  - `messages/` - Centralized messages for UI and assertions.
+  - `messages/` - Centralized messages for UI and API assertions.
 
 ## Encapsulation Level
 
@@ -97,6 +111,56 @@ class LoginPage {
 }
 
 export default new LoginPage();
+```
+
+## API Testing
+
+The project includes API tests using Cypress for the Serverest API. The tests follow these principles:
+
+### API Test Structure
+- Tests are organized in the `cypress/e2e/api/` directory
+- Each API domain has its own test file (e.g., `apiUsers.cy.js`)
+- API helper classes are in `cypress/support/api/` (e.g., `UsersApi.js`)
+
+### API Test Organization
+The API tests use a class-based approach similar to Page Objects:
+- Helper classes encapsulate API calls and validations
+- Each class handles one API domain (e.g., Users, Products)
+- Methods follow a consistent pattern:
+  - API actions (e.g., `createUser`, `loginUser`)
+  - Response validations (e.g., `validateLoginResponse`)
+  - Property validations (e.g., `validateUserProperties`)
+
+### Example: Users API Test
+
+```javascript
+describe('Serverest API - Users', () => {
+  let email, userId, token;
+
+  before(() => {
+    email = UsersApi.generateTestEmail();
+  });
+
+  it('should create an admin user', () => {
+    UsersApi.createAdminUser(email, UsersApi.getTestPassword())
+      .then((createResponse) => {
+        userId = UsersApi.validateUserCreationResponse(createResponse, email);
+      });
+  });
+
+  it('should login with the created admin user', () => {
+    UsersApi.loginUser(email, UsersApi.getTestPassword())
+      .then((loginResponse) => {
+        token = UsersApi.validateLoginResponse(loginResponse, email);
+      });
+  });
+});
+```
+
+### API Test Configuration
+- API URLs are configured in `cypress.env.json`
+- Each environment can have its own API configuration
+- Messages for API responses are centralized in `messages/UserApiMessages.js`
 ```
 
 ### Example: Using Page Object in a Test
