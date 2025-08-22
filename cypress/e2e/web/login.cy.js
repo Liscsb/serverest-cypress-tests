@@ -1,5 +1,4 @@
-
-import LoginPage from '../support/pages/LoginPage';
+import LoginPage from '../../support/pages/LoginPage';
 
 describe('Login UI - Serverest', () => {
   beforeEach(() => {

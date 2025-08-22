@@ -1,7 +1,7 @@
-import LoginPage from '../support/pages/LoginPage';
-import HomePage from '../support/pages/HomePage';
-import ProductDetailsPage from '../support/pages/ProductDetailsPage';
-import ShoppingListPage from '../support/pages/ShoppingListPage';
+import LoginPage from '../../support/pages/LoginPage';
+import HomePage from '../../support/pages/HomePage';
+import ProductDetailsPage from '../../support/pages/ProductDetailsPage';
+import ShoppingListPage from '../../support/pages/ShoppingListPage';
 
 describe('Purchase Flow - Serverest', () => {
   let products;
