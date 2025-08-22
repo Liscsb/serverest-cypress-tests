@@ -1,7 +1,9 @@
 import LoginPageSelectors from '../selectors/LoginPageSelectors';
 import LoginPageMessages from '../messages/LoginPageMessages';
+import { LOGIN_SUCCESS } from '../messages/UserApiMessages';
 import Button from '../components/Button';
 import Input from '../components/Input';
+import UsersApi from '../api/UsersApi';
 
 class LoginPage {
 
@@ -52,8 +54,12 @@ class LoginPage {
   _validateLoginSuccessResponse() {
     cy.wait('@loginRequest').then(({ response }) => {
       expect(response.statusCode).to.eq(200);
-      this._assertResponseMessage(response.body, 'Login realizado com sucesso');
-      expect(response.body).to.have.property('authorization').and.to.be.a('string');
+      this._assertResponseMessage(response.body, LOGIN_SUCCESS);
+      const expectedProps = {
+        authorization: 'string',
+        message: LOGIN_SUCCESS
+      };
+      UsersApi.validateProperties(response.body, expectedProps);
       expect(response.headers['content-type']).to.include('application/json');
       expect(response.body).to.not.have.property('error');
     });
