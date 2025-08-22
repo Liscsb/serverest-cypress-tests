@@ -1,0 +1,13 @@
+# Cypress output
+cypress/screenshots/
+cypress/videos/
+cypress/reports/
+mochawesome-report/
+mochawesome.html
+mochawesome.json
+
+# Node modules
+node_modules/
+
+# System files
+.DS_Store
