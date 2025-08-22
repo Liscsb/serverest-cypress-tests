@@ -4,7 +4,6 @@ class LoginPageSelectors {
   submit = '[data-testid=entrar]';
   errorMsgSelector = '.alert, [data-testid=login-error-msg]';
   successUrl = '/home';
-  logoText = 'Serverest';
 }
 
 export default LoginPageSelectors;

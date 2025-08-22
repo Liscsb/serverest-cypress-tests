@@ -1,29 +1,39 @@
 import UsersApi from '../../support/api/UsersApi';
+import { UserApiHelpers } from '../../support/api/UserApiHelpers';
 
 describe('Serverest API - Users', () => {
-  let email, userId, token;
+  const testData = {
+    email: null,
+    userId: null,
+    token: null
+  };
 
   before(() => {
-    email = UsersApi.generateTestEmail();
+    testData.email = UserApiHelpers.generateTestEmail();
   });
 
   it('should create an admin user', () => {
-    UsersApi.createAdminUser(email, UsersApi.getTestPassword()).then((createResponse) => {
-      userId = UsersApi.validateUserCreationResponse(createResponse, email);
+    UsersApi.createUser({
+      email: testData.email,
+      password: UserApiHelpers.getTestPassword()
+    }).then(id => {
+      testData.userId = id;
     });
   });
 
   it('should login with the created admin user', () => {
-    UsersApi.loginUser(email, UsersApi.getTestPassword()).then((loginResponse) => {
-      token = UsersApi.validateLoginResponse(loginResponse, email);
+    UsersApi.loginUser(
+      testData.email,
+      UserApiHelpers.getTestPassword(),
+      testData.userId
+    ).then(authToken => {
+      testData.token = authToken;
     });
   });
-
+  
   it('should delete the created admin user', () => {
-    if (userId && token) {
-      UsersApi.deleteUser(userId, token).then((deleteResponse) => {
-        UsersApi.validateDeleteResponse(deleteResponse);
-      });
-    }
+    expect(testData.userId).to.exist;
+    expect(testData.token).to.exist;
+    UsersApi.deleteUserAndValidate(testData.userId, testData.token, testData.email);
   });
 });

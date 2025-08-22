@@ -16,9 +16,9 @@ describe('Purchase Flow - Serverest', () => {
     cy.login();
   });
 
-  it('should allow searching, viewing details, adding to list, changing quantity, and adding to cart for Macbook air M4 16 256', () => {
+  it('should allow searching, viewing details, adding to list, changing quantity, and adding to cart', () => {
     const quantity = 2;
-    const product = products.find(p => p.nome === 'Macbook air M4 16 256 silver');
+    const product = products.find(p => p.nome === 'coxinha de carne moída');
     HomePage.searchProduct(product.nome);
     HomePage.assertProductCardVisible(product.nome);
     HomePage.openProductDetails(product.nome);

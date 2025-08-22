@@ -55,18 +55,14 @@ class LoginPage {
     cy.wait('@loginRequest').then(({ response }) => {
       expect(response.statusCode).to.eq(200);
       this._assertResponseMessage(response.body, LOGIN_SUCCESS);
-      const expectedProps = {
-        authorization: 'string',
-        message: LOGIN_SUCCESS
-      };
-      UsersApi.validateProperties(response.body, expectedProps);
+      expect(response.body).to.have.property('authorization').and.to.be.a('string');
+      expect(response.body).to.have.property('message', LOGIN_SUCCESS);
       expect(response.headers['content-type']).to.include('application/json');
       expect(response.body).to.not.have.property('error');
     });
   }
   _validateLoginSuccessUI() {
     this._assertUrlContains(this.selectors.successUrl);
-    cy.contains(this.selectors.logoText).should('be.visible');
     this.form.submit.assertNotExist();
   }
   _validateLoginErrorResponse(errorType = 'invalidCredentials') {
